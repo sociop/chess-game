@@ -1,0 +1,16 @@
+<nav class="navbar">
+    <div class="navbar-content">
+        <button *ngIf="gameState === 'not_started'" class="play-button" (click)="playAgainstComputer()">
+            <span class="game-icon">🎮</span>
+            Play vs Computer
+        </button>
+        <button *ngIf="gameState === 'in_progress'" class="play-button" (click)="playAgain()">
+            <span class="game-icon">🔄</span>
+            Play Again
+        </button>
+    </div>
+</nav>
+
+<main class="main-content">
+    <app-nav-menu></app-nav-menu>
+</main>
