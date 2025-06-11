@@ -23,6 +23,16 @@ export class ComputerModeComponent extends ChessBoardComponent implements OnInit
   public override chessBoardView: (FENChar | null)[][] = [];
   private isFirstMove: boolean = true;
 
+  public override currentStockfishLevelLabel: string | undefined = undefined;
+
+  private stockfishLevelLabels: Record<number, string> = {
+    1: 'Новачок',
+    2: 'Продвинутий',
+    3: 'Сильний',
+    4: 'Мастер',
+    5: 'Гроссмейстер'
+  };
+
   constructor(private stockfishService: StockfishService) {
     super(inject(ChessBoardService));
   }
@@ -33,10 +43,10 @@ export class ComputerModeComponent extends ChessBoardComponent implements OnInit
     this.chessBoard = new ChessBoard();
     this.chessBoardView = this.chessBoard.chessBoardView;
 
-    this.currentStockfishLevel = this.stockfishService.computerConfiguration$.value.level;
+    this.setStockfishLevelLabel(this.stockfishService.computerConfiguration$.value.level);
     const computerConfiSubscription$: Subscription = this.stockfishService.computerConfiguration$.subscribe({
       next: (computerConfiguration) => {
-        this.currentStockfishLevel = computerConfiguration.level;
+        this.setStockfishLevelLabel(computerConfiguration.level);
         if (computerConfiguration.color === Color.White) {
           this.flipBoard();
           this.makeComputerMove();
@@ -86,5 +96,9 @@ export class ComputerModeComponent extends ChessBoardComponent implements OnInit
     const FEN = this.chessBoard.boardAsFEN;
     const { prevX, prevY, newX, newY, promotedPiece } = await firstValueFrom(this.stockfishService.getBestMove(FEN));
     this.updateBoard(prevX, prevY, newX, newY, promotedPiece);
+  }
+
+  private setStockfishLevelLabel(level: number) {
+    this.currentStockfishLevelLabel = this.stockfishLevelLabels[level] || `ELO: ${level}`;
   }
 }

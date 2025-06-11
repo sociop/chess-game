@@ -22,6 +22,8 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
 
   public pieceImagePaths = pieceImagePaths;
   public currentStockfishLevel: number | undefined = undefined;
+  // Добавляем заглушку для совместимости шаблона с наследниками
+  public currentStockfishLevelLabel?: string;
   public gameState: 'not_started' | 'in_progress' | 'finished' = 'not_started';
 
   protected chessBoard!: ChessBoard;

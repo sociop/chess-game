@@ -115,6 +115,7 @@
   height: 100%;
   box-sizing: border-box;
   position: relative;
+  flex-direction: column;
 }
 
 .board-and-moves {
@@ -167,9 +168,8 @@ app-move-list:hover {
 }
 
 .stockfish-level-indicator {
-  position: absolute;
-  top: 24px;
-  right: 250px;
+  position: static;
+  margin: -80px auto 10px auto;
   background: #232323;
   color: #fff;
   padding: 8px 18px;
@@ -177,22 +177,24 @@ app-move-list:hover {
   font-size: 1.1em;
   font-weight: 500;
   box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-  z-index: 10;
+  z-index: 2;
   opacity: 0.95;
   letter-spacing: 0.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 350px;
+  max-width: 100vw;
+  text-align: center;
 }
 
 @media (max-width: 900px) {
   .stockfish-level-indicator {
-    position: static;
+    width: 95vw;
+    min-width: 0;
     margin: 0 auto 8px auto;
-    display: block;
-    text-align: center;
-    right: unset;
-    top: unset;
   }
 }
 
 
 
-  

@@ -1,12 +1,14 @@
 <mat-dialog-content>
-    <h2 mat-dialog-title>Stockfish Strength</h2>
+    <h2 mat-dialog-title>Вибір складності</h2>
 
-    <div class="stockfish-strength-container">
-        <div *ngFor="let level of stockfishLevels" class="strength-div" (click)="selectStockfishLevel(level)"
-            [ngClass]="{'selected': level === stockfishLevel}">
-            {{level}}
-        </div>
-    </div>
+    <mat-form-field appearance="fill" style="width: 100%; max-width: 320px; margin-bottom: 24px;">
+        <mat-label>Складність</mat-label>
+        <mat-select [(value)]="stockfishLevel" (selectionChange)="selectStockfishLevel($event.value)">
+            <mat-option *ngFor="let option of stockfishLevels" [value]="option">
+                {{ option.label }} (ELO: {{ option.elo }})
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
 
     <div class="choose-side">
         <img src="assets/pieces2/white-king.png" class="king-img" draggable="false" (click)="play('w')">

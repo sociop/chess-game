@@ -1,6 +1,6 @@
 <div class="board-area">
-    <div class="stockfish-level-indicator" *ngIf="currentStockfishLevel">
-        Stockfish Level: <b>{{ currentStockfishLevel }}</b>
+     <div class="stockfish-level-indicator" *ngIf="currentStockfishLevelLabel">
+        Складність: <b>&nbsp;{{ currentStockfishLevelLabel }}</b>
     </div>
     <div class="board-and-moves">
         <div class="chess-board" [ngClass]="{'rotated': flipMode}">

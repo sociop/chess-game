@@ -2,11 +2,11 @@
     <div class="navbar-content">
         <button *ngIf="gameState === 'not_started'" class="play-button" (click)="playAgainstComputer()">
             <span class="game-icon">🎮</span>
-            Play vs Computer
+            Грати проти комп'ютера
         </button>
         <button *ngIf="gameState === 'in_progress'" class="play-button" (click)="playAgain()">
             <span class="game-icon">🔄</span>
-            Play Again
+            Грати знову
         </button>
     </div>
 </nav>
