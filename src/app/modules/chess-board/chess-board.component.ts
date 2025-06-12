@@ -33,6 +33,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   public get gameOverMessage(): string | undefined { 
     if (this.chessBoard.gameOverMessage) {
       this.gameState = 'finished';
+      this.showResultOverlay = true;
     }
     return this.chessBoard.gameOverMessage; 
   }
@@ -58,6 +59,9 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
 
   public flipMode: boolean = false;
   private subscriptions$ = new Subscription();
+
+  // Добавлено свойство для управления отображением оверлея результата
+  public showResultOverlay = true;
 
   constructor(protected chessBoardService: ChessBoardService) { }
 
@@ -85,6 +89,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
       .subscribe();
 
     this.subscriptions$.add(keyEventSubscription$);
+    this.showResultOverlay = true;
   }
 
   public ngOnDestroy(): void {
@@ -201,6 +206,8 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
       this.moveSound(new Set<MoveType>([MoveType.BasicMove]));
   }
   public move(x: number, y: number): void {
+    // Запретить ходы, если не на последней позиции истории
+    if (this.gameHistoryPointer !== this.gameHistory.length - 1) return;
     this.selectingPiece(x, y);
     this.placingPiece(x, y);
   }
@@ -229,5 +236,17 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
     else if (moveType.has(MoveType.Check)) moveSound.src = "assets/sound/check.mp3";
 
     moveSound.play();
+  }
+
+  public isAttackOnEnemyPiece(x: number, y: number): boolean {
+    const piece = this.chessBoardView[x][y];
+    if (!piece || !this.selectedSquare.piece) return false;
+    // Проверяем, что фигура вражеская и клетка входит в safeSquares выбранной фигуры
+    const isEnemy = (piece === piece.toUpperCase()) !== (this.selectedSquare.piece === this.selectedSquare.piece.toUpperCase());
+    return isEnemy && this.isSquareSafeForSelectedPiece(x, y);
+  }
+
+  public hideResultOverlay(): void {
+    this.showResultOverlay = false;
   }
 }

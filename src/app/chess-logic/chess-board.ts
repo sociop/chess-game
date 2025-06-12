@@ -385,29 +385,31 @@ export class ChessBoard {
 
     private isGameFinished(): boolean {
         if (this.insufficientMaterial()) {
-            this._gameOverMessage = "Draw due insufficient material";
-            return true;
-        }
-
-        if (!this._safeSquares.size) {
-            if (this._checkState.isInCheck) {
-                const prevPlayer: string = this._playerColor === Color.White ? "Black" : "White";
-                this._gameOverMessage = prevPlayer + " won by checkmate";
-            }
-            else this._gameOverMessage = "Stalemate";
-
+            this._gameOverMessage = "Нічия через недостатню кількість фігур";
             return true;
         }
 
         if (this.threeFoldRepetitionFlag) {
-            this._gameOverMessage = "Draw due three fold repetition rule";
+            this._gameOverMessage = "Нічия через потрійне повторення позиції";
             return true;
         }
 
         if (this.fiftyMoveRuleCounter === 50) {
-            this._gameOverMessage = "Draw due fifty move rule";
+            this._gameOverMessage = "Нічия через правило 50 ходів";
             return true;
         }
+
+        // --- ДОБАВЬТЕ ЭТО ДЛЯ МАТА И ПАТА ---
+        if (!this._safeSquares.size) {
+            if (this._checkState.isInCheck) {
+                const prevPlayer: string = this._playerColor === Color.White ? "Чорні" : "Білі";
+                this._gameOverMessage = prevPlayer + " перемогли матом";
+            } else {
+                this._gameOverMessage = "Пат — нічия";
+            }
+            return true;
+        }
+        // -----------------------------------
 
         return false;
     }

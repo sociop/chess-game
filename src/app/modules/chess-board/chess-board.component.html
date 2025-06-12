@@ -1,4 +1,11 @@
 <div class="board-area">
+    <!-- Результат по центру доски -->
+            <div class="result-overlay" *ngIf="showResultOverlay && gameOverMessage">
+              <div class="result-box">
+                <div class="result-message">{{ gameOverMessage }}</div>
+                <button class="close-result-btn" (click)="hideResultOverlay()">Сховати</button>
+              </div>
+            </div>
      <div class="stockfish-level-indicator" *ngIf="currentStockfishLevelLabel">
         Складність: <b>&nbsp;{{ currentStockfishLevelLabel }}</b>
     </div>
@@ -12,7 +19,8 @@
                     'king-in-check': isSquareChecked(x, y),
                     'promotion-square': isSquarePromotionSquare(x, y)
                 }" (click)="move(x, y)">
-                    <div [ngClass]="{'safe-square': isSquareSafeForSelectedPiece(x, y)}"></div>
+                    <div *ngIf="isSquareSafeForSelectedPiece(x, y) && !chessBoardView[x][y]" class="safe-square"></div>
+                    <div *ngIf="isAttackOnEnemyPiece(x, y)" class="attack-circle"></div>
                     <img *ngIf="piece" [src]="pieceImagePaths[piece]" [alt]="piece" class="piece"
                         [ngClass]="{'rotated': flipMode}">
                 </div>
@@ -29,9 +37,7 @@
 
 <button (click)="flipBoard()">Flip</button>
 
-<h2 *ngIf="gameOverMessage" class="game-over-message">
-    {{gameOverMessage}}
-</h2>
+
 
 <div *ngIf="isPromotionActive" class="promotion-dialog">
     <img *ngFor="let piece of promotionPieces()" [src]="pieceImagePaths[piece]" (click)="promotePiece(piece)">
