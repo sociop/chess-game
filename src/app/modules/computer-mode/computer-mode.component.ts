@@ -34,7 +34,7 @@ export class ComputerModeComponent extends ChessBoardComponent implements OnInit
   };
 
   constructor(private stockfishService: StockfishService) {
-    super(inject(ChessBoardService));
+    super(inject(ChessBoardService), stockfishService);
   }
 
   public override ngOnInit(): void {

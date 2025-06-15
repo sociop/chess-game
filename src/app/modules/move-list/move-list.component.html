@@ -17,6 +17,10 @@
         (click)="showPreviousPosition(gameHistoryLength - 1)">
         <mat-icon>last_page</mat-icon>
     </button>
+
+    <button mat-icon-button color="primary" (click)="showHint.emit()" style="margin-left: 12px;">
+        <mat-icon style="color: #7b1fa2;">lightbulb</mat-icon>
+    </button>
 </div>
 
 <div class="move-list">
@@ -36,3 +40,5 @@
         </div>
     </div>
 </div>
+
+<div *ngIf="hintText" class="hint-text">{{ hintText }}</div>

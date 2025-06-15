@@ -20,13 +20,18 @@
         <div class="chess-board-wrapper">
             <div class="chess-board" [ngClass]="{'rotated': flipMode}" style="position: relative;">
                 <div *ngFor="let row of chessBoardView; let x = index" class="row" style="position: relative;">
-                    <div *ngFor="let piece of row; let y = index" class="square" [ngClass]="{'dark': isSquareDark(x, y), 
-                        'light':!isSquareDark(x, y),
-                        'selected-square': isSquareSelected(x, y),
-                        'last-move': isSquareLastMove(x, y),
-                        'king-in-check': isSquareChecked(x, y),
-                        'promotion-square': isSquarePromotionSquare(x, y)
-                    }" (click)="move(x, y)">
+                    <div *ngFor="let piece of row; let y = index" class="square"
+                        [ngClass]="{
+                            'dark': isSquareDark(x, y),
+                            'light': !isSquareDark(x, y),
+                            'selected-square': isSquareSelected(x, y),
+                            'last-move': isSquareLastMove(x, y),
+                            'king-in-check': isSquareChecked(x, y),
+                            'promotion-square': isSquarePromotionSquare(x, y),
+                            'hint-from': isHintFrom(x, y),
+                            'hint-to': isHintTo(x, y) && !isHintCapture(x, y),
+                            'hint-capture': isHintCapture(x, y)
+                        }" (click)="move(x, y)">
                         <div *ngIf="isSquareSafeForSelectedPiece(x, y) && !chessBoardView[x][y]" class="safe-square"></div>
                         <div *ngIf="isAttackOnEnemyPiece(x, y)" class="attack-circle"></div>
                         <img *ngIf="piece" [src]="pieceImagePaths[piece]" [alt]="piece" class="piece"
@@ -46,8 +51,10 @@
             [moveList]="moveList" 
             [gameHistoryPointer]="gameHistoryPointer" 
             [gameHistoryLength]="gameHistory.length"
-            (showPreviousPositionEvent)="showPreviousPosition($event)">
-        </app-move-list>
+            [hintText]="hintText"
+            (showPreviousPositionEvent)="showPreviousPosition($event)"
+            (showHint)="onShowHint()"
+        ></app-move-list>
     </div>
 </div>
 

@@ -7,6 +7,7 @@ import { Subscription, filter, fromEvent, tap } from 'rxjs';
 import { FENConverter } from 'src/app/chess-logic/FENConverter';
 import { CommonModule } from '@angular/common';
 import { MoveListComponent } from '../move-list/move-list.component';
+import { StockfishService } from '../computer-mode/stockfish.service';
 
 @Component({
   selector: 'app-chess-board',
@@ -62,8 +63,12 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
 
   // Добавлено свойство для управления отображением оверлея результата
   public showResultOverlay = true;
+  public hintText: string | null = null;
+  public hintFrom: { x: number, y: number } | null = null;
+  public hintTo: { x: number, y: number } | null = null;
+  public hintIsCapture: boolean = false;
 
-  constructor(protected chessBoardService: ChessBoardService) { }
+  constructor(protected chessBoardService: ChessBoardService, protected stockfish: StockfishService) { }
 
   public ngOnInit(): void {
     const keyEventSubscription$: Subscription = fromEvent<KeyboardEvent>(document, "keyup")
@@ -210,6 +215,9 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
     if (this.gameHistoryPointer !== this.gameHistory.length - 1) return;
     this.selectingPiece(x, y);
     this.placingPiece(x, y);
+
+    this.hintFrom = null;
+    this.hintTo = null;
   }
 
   private isWrongPieceSelected(piece: FENChar): boolean {
@@ -252,5 +260,32 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
 
   public getColumnLetter(index: number): string {
     return String.fromCharCode(65 + index); // 65 = 'A'
+  }
+
+  public onShowHint(): void {
+    this.hintFrom = null;
+    this.hintTo = null;
+    this.hintIsCapture = false;
+    const fen = this.chessBoard.boardAsFEN;
+    this.stockfish.getBestMove(fen).subscribe(move => {
+      if (!move) return;
+      this.hintFrom = { x: move.prevX, y: move.prevY };
+      this.hintTo = { x: move.newX, y: move.newY };
+      // Проверяем, есть ли фигура в точке назначения и она вражеская
+      const toPiece = this.chessBoardView[move.newX][move.newY];
+      const fromPiece = this.chessBoardView[move.prevX][move.prevY];
+      if (toPiece && fromPiece && ((toPiece === toPiece.toUpperCase()) !== (fromPiece === fromPiece.toUpperCase()))) {
+        this.hintIsCapture = true;
+      }
+    });
+  }
+  public isHintCapture(x: number, y: number): boolean {
+    return !!this.hintIsCapture && !!this.hintTo && this.hintTo.x === x && this.hintTo.y === y;
+  }
+  public isHintFrom(x: number, y: number): boolean {
+    return !!this.hintFrom && this.hintFrom.x === x && this.hintFrom.y === y;
+  }
+  public isHintTo(x: number, y: number): boolean {
+    return !!this.hintTo && this.hintTo.x === x && this.hintTo.y === y;
   }
 }
