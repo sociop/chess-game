@@ -23,8 +23,8 @@ export interface StockfishLevelOption {
 })
 export class PlayAgainstComputerDialogComponent {
   public stockfishLevels: readonly StockfishLevelOption[] = [
-    { level: 1, label: 'Новачок', elo: 1600 },
-    { level: 2, label: 'Продвинутий', elo: 1800 },
+    { level: 1, label: 'Новачок', elo: 1300 },
+    { level: 2, label: 'Продвинутий', elo: 1600 },
     { level: 3, label: 'Сильний', elo: 2000 },
     { level: 4, label: 'Мастер', elo: 2300 },
     { level: 5, label: 'Гроссмейстер', elo: 3000 }

@@ -249,4 +249,8 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   public hideResultOverlay(): void {
     this.showResultOverlay = false;
   }
+
+  public getColumnLetter(index: number): string {
+    return String.fromCharCode(65 + index); // 65 = 'A'
+  }
 }

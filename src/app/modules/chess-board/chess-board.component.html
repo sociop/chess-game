@@ -10,19 +10,35 @@
         Складність: <b>&nbsp;{{ currentStockfishLevelLabel }}</b>
     </div>
     <div class="board-and-moves">
-        <div class="chess-board" [ngClass]="{'rotated': flipMode}">
-            <div *ngFor="let row of chessBoardView; let x = index" class="row">
-                <div *ngFor="let piece of row; let y = index" class="square" [ngClass]="{'dark': isSquareDark(x, y), 
-                    'light':!isSquareDark(x, y),
-                    'selected-square': isSquareSelected(x, y),
-                    'last-move': isSquareLastMove(x, y),
-                    'king-in-check': isSquareChecked(x, y),
-                    'promotion-square': isSquarePromotionSquare(x, y)
-                }" (click)="move(x, y)">
-                    <div *ngIf="isSquareSafeForSelectedPiece(x, y) && !chessBoardView[x][y]" class="safe-square"></div>
-                    <div *ngIf="isAttackOnEnemyPiece(x, y)" class="attack-circle"></div>
-                    <img *ngIf="piece" [src]="pieceImagePaths[piece]" [alt]="piece" class="piece"
-                        [ngClass]="{'rotated': flipMode}">
+        <!-- Координаты слева -->
+        <div class="board-coords-vertical">
+            <div *ngFor="let row of chessBoardView; let x = index" class="board-coord-row"
+                [ngClass]="isSquareDark(x, 0) ? 'dark-coord' : 'light-coord'">
+                {{ 8 - x }}
+            </div>
+        </div>
+        <div class="chess-board-wrapper">
+            <div class="chess-board" [ngClass]="{'rotated': flipMode}" style="position: relative;">
+                <div *ngFor="let row of chessBoardView; let x = index" class="row" style="position: relative;">
+                    <div *ngFor="let piece of row; let y = index" class="square" [ngClass]="{'dark': isSquareDark(x, y), 
+                        'light':!isSquareDark(x, y),
+                        'selected-square': isSquareSelected(x, y),
+                        'last-move': isSquareLastMove(x, y),
+                        'king-in-check': isSquareChecked(x, y),
+                        'promotion-square': isSquarePromotionSquare(x, y)
+                    }" (click)="move(x, y)">
+                        <div *ngIf="isSquareSafeForSelectedPiece(x, y) && !chessBoardView[x][y]" class="safe-square"></div>
+                        <div *ngIf="isAttackOnEnemyPiece(x, y)" class="attack-circle"></div>
+                        <img *ngIf="piece" [src]="pieceImagePaths[piece]" [alt]="piece" class="piece"
+                            [ngClass]="{'rotated': flipMode}">
+                    </div>
+                </div>
+            </div>
+            <!-- Координаты снизу -->
+            <div class="board-coord-bottom">
+                <div *ngFor="let i of [].constructor(8); let idx = index" class="board-coord-bottom-item"
+                    [ngClass]="isSquareDark(7, idx) ? 'dark-coord' : 'light-coord'">
+                    {{ getColumnLetter(idx) }}
                 </div>
             </div>
         </div>

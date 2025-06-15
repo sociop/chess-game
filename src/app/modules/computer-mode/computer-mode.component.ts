@@ -69,7 +69,9 @@ export class ComputerModeComponent extends ChessBoardComponent implements OnInit
           return;
         }
 
-        const { prevX, prevY, newX, newY, promotedPiece } = await firstValueFrom(this.stockfishService.getBestMove(FEN));
+        const move = await firstValueFrom(this.stockfishService.getBestMove(FEN));
+        if (!move) return;
+        const { prevX, prevY, newX, newY, promotedPiece } = move;
         this.updateBoard(prevX, prevY, newX, newY, promotedPiece);
       }
     });
@@ -94,7 +96,9 @@ export class ComputerModeComponent extends ChessBoardComponent implements OnInit
     if (!this.chessBoard) return;
     
     const FEN = this.chessBoard.boardAsFEN;
-    const { prevX, prevY, newX, newY, promotedPiece } = await firstValueFrom(this.stockfishService.getBestMove(FEN));
+    const move = await firstValueFrom(this.stockfishService.getBestMove(FEN));
+    if (!move) return;
+    const { prevX, prevY, newX, newY, promotedPiece } = move;
     this.updateBoard(prevX, prevY, newX, newY, promotedPiece);
   }
 

@@ -10,6 +10,11 @@
   padding: 20px;
 }
 
+.chess-board-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
 .chess-board {
     display: flex;
     justify-content: center;
@@ -123,11 +128,12 @@
 .board-and-moves {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 100vw;
   height: 100%;
   box-sizing: border-box;
+  position: relative;
 }
 
 app-move-list {
@@ -257,6 +263,115 @@ app-move-list:hover {
 }
 .close-result-btn:hover {
   background: #7a00cc;
+}
+
+.board-coord {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    user-select: none;
+}
+
+.board-coords-vertical {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 560px;
+    margin-right: 4px;
+    user-select: none;
+}
+
+.board-coord-row {
+    height: 70px;
+    width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    z-index: 2;
+}
+
+.board-coord-bottom {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    left: 0;
+    bottom: -28px;
+    width: 560px;
+    height: 24px;
+    z-index: 2;
+}
+
+.board-coord-bottom-item {
+    width: 70px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.dark-coord {
+    color: #779AAF;
+}
+.light-coord {
+    color: #D9E4E8;
+}
+.fen-ranks {
+    position: absolute;
+    left: -30px;
+    top: 0;
+    height: 560px;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    z-index: 2;
+}
+.fen-rank-label {
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    user-select: none;
+}
+.fen-files {
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    width: 560px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    z-index: 2;
+}
+.fen-file-label {
+    width: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    user-select: none;
+}
+.dark-label {
+    color: #779AAF;
+}
+.light-label {
+    color: #D9E4E8;
+}
+.board-area {
+    position: relative;
+}
+.board-and-moves {
+    position: relative;
 }
 
 

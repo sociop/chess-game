@@ -40,7 +40,7 @@ export class StockfishService {
     return { prevX, prevY, newX, newY, promotedPiece };
   }
 
-  public getBestMove(fen: string): Observable<ChessMove> {
+  public getBestMove(fen: string): Observable<ChessMove | null> {
     const queryParams: StockfishQueryParams = {
       fen,
       depth: stockfishLevels[this.computerConfiguration$.value.level],
@@ -50,10 +50,16 @@ export class StockfishService {
 
     return this.http.get<StockfishResponse>(this.api, { params })
       .pipe(
-        switchMap(response => {
+        switchMap((response: StockfishResponse) => {
+          // Для первой сложности: всегда брать первый ход из continuation (если есть), иначе bestmove
+          if (this.computerConfiguration$.value.level === 1 && response.continuation) {
+            const firstMove = response.continuation.split(' ')[0];
+            return of(this.moveFromStockfishString(firstMove));
+          }
+          // Для остальных — стандартно bestmove
           const bestMove: string = response.bestmove.split(" ")[1];
           return of(this.moveFromStockfishString(bestMove));
         })
-      )
+      );
   }
 }
