@@ -344,6 +344,108 @@ export class ChessBoard {
         this._isGameOver = this.isGameFinished();
     }
 
+    public truncateHistory(pointer: number): void {
+        this._moveList = this._moveList.slice(0, Math.ceil(pointer / 2));
+        this._gameHistory = this._gameHistory.slice(0, pointer + 1);
+    }
+
+    public restoreFromHistory(index: number): void {
+        const history = this._gameHistory[index];
+        if (!history) return;
+        // Восстановить FEN-представление
+        const fenBoard = history.board;
+        // Восстановить chessBoard (Piece | null)[][]
+        for (let x = 0; x < this.chessBoardSize; x++) {
+            for (let y = 0; y < this.chessBoardSize; y++) {
+                const fen = fenBoard[x][y];
+                if (!fen) {
+                    this.chessBoard[x][y] = null;
+                } else {
+                    // Восстановить фигуру по FEN
+                    let color = fen === fen.toUpperCase() ? Color.White : Color.Black;
+                    let piece: Piece | null = null;
+                    switch (fen.toLowerCase()) {
+                        case 'p': piece = new Pawn(color); break;
+                        case 'n': piece = new Knight(color); break;
+                        case 'b': piece = new Bishop(color); break;
+                        case 'r': piece = new Rook(color); break;
+                        case 'q': piece = new Queen(color); break;
+                        case 'k': piece = new King(color); break;
+                    }
+                    this.chessBoard[x][y] = piece;
+                }
+            }
+        }
+        this._lastMove = history.lastMove ? { ...history.lastMove } : undefined;
+        this._checkState = { ...history.checkState };
+        // Восстановить цвет игрока
+        this._playerColor = (this._playerColor === Color.White ? Color.Black : Color.White);
+        this._safeSquares = this.findSafeSqures();
+    }
+
+    /**
+     * Откатить последний ход (аналог game.undo() в chess.js)
+     * Удаляет последний элемент из истории и из moveList
+     */
+    public undoMove(): boolean {
+    if (this._gameHistory.length <= 1) return false;
+
+    // Удалить последний ход из moveList
+    if (this._moveList.length > 0) {
+        const last = this._moveList[this._moveList.length - 1];
+        if (last.length > 1) {
+            // Если в колонке два хода, удаляем только второй
+            last.pop();
+        } else {
+            // Если только один ход, удаляем всю колонку
+            this._moveList.pop();
+        }
+    }
+
+    // После удаления убедиться, что нет пустых колонок
+    while (this._moveList.length > 0 && (this._moveList[this._moveList.length - 1] as any).length === 0) {
+        this._moveList.pop();
+    }
+
+    this._gameHistory.pop();
+
+    // Восстановить состояние по последнему элементу истории
+    const lastHistory = this._gameHistory[this._gameHistory.length - 1];
+    if (!lastHistory) return false;
+    for (let x = 0; x < this.chessBoardSize; x++) {
+        for (let y = 0; y < this.chessBoardSize; y++) {
+            const fen = lastHistory.board[x][y];
+            if (!fen) {
+                this.chessBoard[x][y] = null;
+            } else {
+                let color = fen === fen.toUpperCase() ? Color.White : Color.Black;
+                let piece: Piece | null = null;
+                switch (fen.toLowerCase()) {
+                    case 'p': piece = new Pawn(color); break;
+                    case 'n': piece = new Knight(color); break;
+                    case 'b': piece = new Bishop(color); break;
+                    case 'r': piece = new Rook(color); break;
+                    case 'q': piece = new Queen(color); break;
+                    case 'k': piece = new King(color); break;
+                }
+                this.chessBoard[x][y] = piece;
+            }
+        }
+    }
+    this._lastMove = lastHistory.lastMove ? { ...lastHistory.lastMove } : undefined;
+    this._checkState = { ...lastHistory.checkState };
+    this._playerColor = (this._playerColor === Color.White ? Color.Black : Color.White);
+    this._safeSquares = this.findSafeSqures();
+    this._boardAsFEN = this.FENConverter.convertBoardToFEN(
+        this.chessBoard,
+        this._playerColor,
+        this._lastMove,
+        this.fiftyMoveRuleCounter,
+        this.fullNumberOfMoves
+    );
+    return true;
+}
+
     private handlingSpecialMoves(piece: Piece, prevX: number, prevY: number, newX: number, newY: number, moveType: Set<MoveType>): void {
         if (piece instanceof King && Math.abs(newY - prevY) === 2) {
             // newY > prevY  === king side castle
@@ -509,10 +611,14 @@ export class ChessBoard {
         if (moveType.has(MoveType.Check)) move += "+";
         else if (moveType.has(MoveType.CheckMate)) move += "#";
 
-        if (!this._moveList[this.fullNumberOfMoves - 1])
-            this._moveList[this.fullNumberOfMoves - 1] = [move];
-        else
-            this._moveList[this.fullNumberOfMoves - 1].push(move);
+        if (
+        this._moveList.length === 0 ||
+        this._moveList[this._moveList.length - 1].length === 2
+    ) {
+        this._moveList.push([move]);
+    } else {
+        this._moveList[this._moveList.length - 1].push(move);
+    }
     }
 
     private startingPieceCoordsNotation(): string {

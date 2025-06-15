@@ -211,14 +211,27 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
       this.moveSound(new Set<MoveType>([MoveType.BasicMove]));
   }
   public move(x: number, y: number): void {
-    // Запретить ходы, если не на последней позиции истории
-    if (this.gameHistoryPointer !== this.gameHistory.length - 1) return;
+    if (this.gameHistoryPointer !== this.chessBoard.gameHistory.length - 1) {
+        this.chessBoard.restoreFromHistory(this.chessBoard.gameHistory.length - 1);
+        this.chessBoardView = this.chessBoard.chessBoardView;
+        this.gameHistoryPointer = this.chessBoard.gameHistory.length - 1;
+        // Сбросить состояние окончания игры
+        this.gameState = 'in_progress';
+        // Сбросить подсветку шаха/мата
+        this.markLastMoveAndCheckState(this.chessBoard.lastMove, this.chessBoard.checkState);
+        // Сбросить выделения и подсказки
+        this.unmarkingPreviouslySlectedAndSafeSquares();
+        this.hintFrom = null;
+        this.hintTo = null;
+        this.hintIsCapture = false;
+        return;
+    }
+
     this.selectingPiece(x, y);
     this.placingPiece(x, y);
-
     this.hintFrom = null;
     this.hintTo = null;
-  }
+}
 
   private isWrongPieceSelected(piece: FENChar): boolean {
     const isWhitePieceSelected: boolean = piece === piece.toUpperCase();
@@ -227,12 +240,33 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   }
 
   public showPreviousPosition(moveIndex: number): void {
-    const { board, checkState, lastMove } = this.gameHistory[moveIndex];
-    this.chessBoardView = board;
-    this.markLastMoveAndCheckState(lastMove, checkState);
+    this.chessBoard.restoreFromHistory(moveIndex);
+    this.chessBoardView = this.chessBoard.chessBoardView;
     this.gameHistoryPointer = moveIndex;
-  }
+    this.unmarkingPreviouslySlectedAndSafeSquares();
+    this.hintFrom = null;
+    this.hintTo = null;
+    this.hintIsCapture = false;
+    this.markLastMoveAndCheckState(this.chessBoard.lastMove, this.chessBoard.checkState);
 
+    this.gameState = 'in_progress';
+    (this as any).gameOverMessage = undefined;
+}
+
+  public onUndoLastMove(): void {
+    const moveSound = new Audio("assets/sound/move.mp3");
+    moveSound.play();
+    
+    this.chessBoard.undoMove();
+    this.chessBoard.undoMove();
+    this.chessBoardView = this.chessBoard.chessBoardView;
+    this.unmarkingPreviouslySlectedAndSafeSquares();
+    this.hintFrom = null;
+    this.hintTo = null;
+    this.hintIsCapture = false;
+    this.gameHistoryPointer = this.chessBoard.gameHistory.length - 1;
+    this.checkState = this.chessBoard.checkState;
+}
   private moveSound(moveType: Set<MoveType>): void {
     const moveSound = new Audio("assets/sound/move.mp3");
 

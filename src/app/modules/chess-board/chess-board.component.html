@@ -50,15 +50,17 @@
         <app-move-list 
             [moveList]="moveList" 
             [gameHistoryPointer]="gameHistoryPointer" 
-            [gameHistoryLength]="gameHistory.length"
+            [gameHistoryLength]="chessBoard.gameHistory.length"
             [hintText]="hintText"
+            (flipBoard)="flipBoard()"
             (showPreviousPositionEvent)="showPreviousPosition($event)"
             (showHint)="onShowHint()"
+            (undoLastMove)="onUndoLastMove()"
         ></app-move-list>
     </div>
 </div>
 
-<button (click)="flipBoard()">Flip</button>
+
 
 
 

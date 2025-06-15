@@ -3,7 +3,7 @@
         <mat-icon>first_page</mat-icon>
     </button>
 
-    <button mat-icon-button color="primary" [disabled]="gameHistoryPointer === 0"
+    <button mat-icon-button color="primary" [disabled]="gameHistoryPointer <= 0"
         (click)="showPreviousPosition(gameHistoryPointer - 1)">
         <mat-icon>navigate_before</mat-icon>
     </button>
@@ -18,8 +18,17 @@
         <mat-icon>last_page</mat-icon>
     </button>
 
+    <button mat-icon-button color="primary" (click)="flipBoard.emit()" style="margin-left: 12px;">
+        <mat-icon>swap_vert</mat-icon>
+    </button>
+
     <button mat-icon-button color="primary" (click)="showHint.emit()" style="margin-left: 12px;">
         <mat-icon style="color: #7b1fa2;">lightbulb</mat-icon>
+    </button>
+
+    <button mat-icon-button color="primary" [disabled]="gameHistoryPointer < 2"
+        (click)="undoLastMove.emit()" style="margin-left: 8px;">
+        <mat-icon>undo</mat-icon>
     </button>
 </div>
 
@@ -42,3 +51,4 @@
 </div>
 
 <div *ngIf="hintText" class="hint-text">{{ hintText }}</div>
+

@@ -141,8 +141,8 @@ app-move-list {
   left: 50%;
   top: 50%;
   transform: translate(320px, -50%);
-  min-width: 220px;
-  width: 350px;
+  min-width: 225px;
+  width: 406px;
   background: #232323;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.10);
@@ -375,11 +375,13 @@ app-move-list:hover {
 }
 
 .hint-from {
-    box-shadow: inset rgb(6, 179, 0) 0px 0px 40px 0px, inset rgb(6, 179, 0) 0px 0px 40px 0px, inset rgba(0, 0, 0, 1) 0px 0px 36px -24px;
+    box-shadow: inset rgb(0, 180, 120) 0px 0px 40px 0px, inset rgb(0, 200, 160) 0px 0px 40px 0px, inset rgba(0, 0, 0, 1) 0px 0px 36px -24px;
 }
 .hint-to {
-    box-shadow: inset rgb(6, 179, 0) 0px 0px 40px 0px, inset rgb(6, 179, 0) 0px 0px 40px 0px, inset rgba(0, 0, 0, 1) 0px 0px 36px -24px;
+    box-shadow: inset rgb(0, 160, 100) 0px 0px 40px 0px, inset rgb(0, 190, 130) 0px 0px 40px 0px, inset rgba(0, 0, 0, 1) 0px 0px 36px -24px;
 }
+
+
 .hint-capture {
     box-shadow: inset rgb(179, 21, 0) 0px 0px 40px 0px, inset rgb(163, 11, 0) 0px 0px 40px 0px, inset rgba(0, 0, 0, 1) 0px 0px 36px -24px;
 }

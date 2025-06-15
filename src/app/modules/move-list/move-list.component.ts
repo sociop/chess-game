@@ -17,9 +17,15 @@ export class MoveListComponent {
   @Input({ required: true }) public gameHistoryLength: number = 1;
   @Input() public hintText: string | null = null;
   @Output() public showPreviousPositionEvent = new EventEmitter<number>();
+  @Output() public flipBoard = new EventEmitter<void>();
   @Output() public showHint = new EventEmitter<void>();
+  @Output() public undoLastMove = new EventEmitter<void>();
 
   public showPreviousPosition(moveIndex: number): void {
     this.showPreviousPositionEvent.emit(moveIndex);
+  }
+
+  public getVisibleMovesCount(): number {
+    return Math.ceil(this.gameHistoryPointer / 2);
   }
 }
