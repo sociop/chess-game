@@ -206,9 +206,9 @@ app-move-list:hover {
 
 .attack-circle {
     position: absolute;
-    width: 69px;
-    height: 69px;
-    border: 6px solid #ff0000;
+    width: 500px;
+    height: 500px;
+    border: 60px solid #ff0000;
     border-radius: 50%;
     box-sizing: border-box;
     pointer-events: none;
@@ -216,14 +216,6 @@ app-move-list:hover {
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: 110;
-}
-
-@media (max-width: 600px) {
-  .attack-circle {
-    width: 38px !important;
-    height: 38px !important;
-    border-width: 4px !important;
-  }
 }
 
 .result-overlay {
@@ -404,6 +396,13 @@ app-move-list:hover {
     padding: 0 !important;
     gap: 0 !important;
   }
+  
+  .attack-circle {
+    width: 41px !important;
+    height: 41px !important;
+    border-width: 4px !important;
+  
+}
   .board-and-moves {
     justify-content: flex-start !important;
     margin: 0 !important;
@@ -441,6 +440,12 @@ app-move-list:hover {
     max-width: 42px !important;
     max-height: 42px !important;
   }
+
+  .safe-square {
+    height: 16px !important;
+    width: 16px !important;
+  }
+
   .board-coords-vertical,
   .board-coord-bottom,
   .fen-ranks,

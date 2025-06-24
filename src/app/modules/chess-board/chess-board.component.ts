@@ -70,6 +70,9 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   constructor(protected chessBoardService: ChessBoardService, protected stockfish: StockfishService) { }
 
   public ngOnInit(): void {
+    // Предупреждение о перезагрузке страницы во время игры
+    window.addEventListener('beforeunload', this.beforeUnloadHandler);
+
     const keyEventSubscription$: Subscription = fromEvent<KeyboardEvent>(document, "keyup")
       .pipe(
         filter(event => event.key === "ArrowRight" || event.key === "ArrowLeft"),
@@ -97,6 +100,7 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    window.removeEventListener('beforeunload', this.beforeUnloadHandler);
     this.subscriptions$.unsubscribe();
     this.chessBoardService.chessBoardState$.next(FENConverter.initalPosition);
   }
@@ -321,4 +325,13 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
   public isHintTo(x: number, y: number): boolean {
     return !!this.hintTo && this.hintTo.x === x && this.hintTo.y === y;
   }
+
+  private beforeUnloadHandler = (event: BeforeUnloadEvent) => {
+    if (this.gameState === 'in_progress') {
+      event.preventDefault();
+      event.returnValue = '';
+      return '';
+    }
+    return undefined;
+  };
 }
