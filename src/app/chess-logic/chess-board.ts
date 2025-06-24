@@ -501,7 +501,6 @@ export class ChessBoard {
             return true;
         }
 
-        // --- ДОБАВЬТЕ ЭТО ДЛЯ МАТА И ПАТА ---
         if (!this._safeSquares.size) {
             if (this._checkState.isInCheck) {
                 const prevPlayer: string = this._playerColor === Color.White ? "Чорні" : "Білі";

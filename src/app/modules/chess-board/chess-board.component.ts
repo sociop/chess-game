@@ -23,7 +23,6 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
 
   public pieceImagePaths = pieceImagePaths;
   public currentStockfishLevel: number | undefined = undefined;
-  // Добавляем заглушку для совместимости шаблона с наследниками
   public currentStockfishLevelLabel?: string;
   public gameState: 'not_started' | 'in_progress' | 'finished' = 'not_started';
 
@@ -251,12 +250,12 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
 
     this.gameState = 'in_progress';
     (this as any).gameOverMessage = undefined;
-}
+  }
 
   public onUndoLastMove(): void {
     const moveSound = new Audio("assets/sound/move.mp3");
     moveSound.play();
-    
+
     this.chessBoard.undoMove();
     this.chessBoard.undoMove();
     this.chessBoardView = this.chessBoard.chessBoardView;
@@ -266,7 +265,8 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
     this.hintIsCapture = false;
     this.gameHistoryPointer = this.chessBoard.gameHistory.length - 1;
     this.checkState = this.chessBoard.checkState;
-}
+  }
+  
   private moveSound(moveType: Set<MoveType>): void {
     const moveSound = new Audio("assets/sound/move.mp3");
 
@@ -305,7 +305,6 @@ export class ChessBoardComponent implements OnInit, OnDestroy {
       if (!move) return;
       this.hintFrom = { x: move.prevX, y: move.prevY };
       this.hintTo = { x: move.newX, y: move.newY };
-      // Проверяем, есть ли фигура в точке назначения и она вражеская
       const toPiece = this.chessBoardView[move.newX][move.newY];
       const fromPiece = this.chessBoardView[move.prevX][move.prevY];
       if (toPiece && fromPiece && ((toPiece === toPiece.toUpperCase()) !== (fromPiece === fromPiece.toUpperCase()))) {

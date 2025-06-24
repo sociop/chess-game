@@ -1,5 +1,4 @@
-<div class="board-area">
-    <!-- Результат по центру доски -->
+Г<div class="board-area">
             <div class="result-overlay" *ngIf="showResultOverlay && gameOverMessage">
               <div class="result-box">
                 <div class="result-message">{{ gameOverMessage }}</div>
@@ -10,7 +9,6 @@
         Складність: <b>&nbsp;{{ currentStockfishLevelLabel }}</b>
     </div>
     <div class="board-and-moves">
-        <!-- Координаты слева -->
         <div class="board-coords-vertical">
             <div *ngFor="let row of chessBoardView; let x = index" class="board-coord-row"
                 [ngClass]="isSquareDark(x, 0) ? 'dark-coord' : 'light-coord'">
@@ -39,7 +37,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Координаты снизу -->
             <div class="board-coord-bottom">
                 <div *ngFor="let i of [].constructor(8); let idx = index" class="board-coord-bottom-item"
                     [ngClass]="isSquareDark(7, idx) ? 'dark-coord' : 'light-coord'">
