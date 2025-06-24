@@ -206,9 +206,9 @@ app-move-list:hover {
 
 .attack-circle {
     position: absolute;
-    width: 500px;
-    height: 500px;
-    border: 60px solid #ff0000;
+    width: 69px;
+    height: 69px;
+    border: 6px solid #ff0000;
     border-radius: 50%;
     box-sizing: border-box;
     pointer-events: none;
