@@ -1,5 +1,5 @@
 <div>
-    <button mat-icon-button color="primary" [disabled]="gameHistoryPointer === 0" (click)="showPreviousPosition(0)">
+    <button mat-icon-button color="primary" [disabled]="gameHistoryPointer <= 1" (click)="showPreviousPosition(1)">
         <mat-icon>first_page</mat-icon>
     </button>
 
